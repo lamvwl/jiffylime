@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 
 //routes
+
 app.get('/dayone', function (req, res) {
   res.send('dayone')
 })
@@ -42,5 +43,11 @@ app.get('/stats', function (req, res) {
   res.send('stats')
 })
 
-app.listen(3000);
+app.use(function (req, res) {
+  res.sendStatus(404);
+})
+
+app.listen(3000, process.env.PORT, function () {
+  console.log('Starting up...');
+});
 
