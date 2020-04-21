@@ -1,11 +1,13 @@
 var express = require('express');
 var app = express();
 
+
+app.use('/', require('./routes/router.js'))
 //routes
 
-app.get('/dayone', function (req, res) {
-  res.send('dayone')
-})
+// app.get('/dayone', function (req, res) {
+//   res.send('dayone')
+// })
 
 app.get('/live', function (req, res) {
   res.send('live')
@@ -15,7 +17,7 @@ app.get('/countrydates', function (req, res) {
   res.send('countrydates')
 })
 
-app.get('/total', function (req, res) {
+app.get('/total', function (req, resmk) {
   res.send('total')
 })
 
