@@ -1,10 +1,17 @@
 var express = require('express');
 var app = express();
+const axios = require('axios');
 
 //routes
 
 app.get('/dayone', function (req, res) {
-  res.send('dayone')
+  axios.get('https://api.covid19api.com/dayone/country/south-africa')
+    .then(function (response) {
+      res.send(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
 })
 
 app.get('/live', function (req, res) {
