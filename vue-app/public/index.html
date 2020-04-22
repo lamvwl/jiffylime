@@ -7,11 +7,36 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
-  <body>
+  <body style="background-color:black";>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
+
+    <script src="scripts/d3-3.5.3.min.js"></script>
+    <script src="scripts/topojson-1.6.9.min.js"></script>
+    <script src="scripts/datamaps.world.hires.min.js"></script>
+        <!-- <div id="app"></div> -->
+    <div id="container" style="position: relative; width: 1300px; height: 500px;"></div>
+    <script>
+      var map = new Datamap({
+        element: document.getElementById('container'),
+        geographyConfig: {
+          popupOnHover: true,
+          highlightOnHover: true,
+          highlightFillColor: 'rgba(0,253,253,1.0)',
+          borderColor: 'rgba(0,253,253,1.0)',
+          borderWidth: 0.5
+        },
+        fills: {
+          HIGH: 'green',
+          LOW: 'yellow',
+          MEDIUM: 'blue',
+          UNKNOWN: 'rgb(0,0,0)',
+          fillKey: 'rgba(168,237,255,0.5)',
+          fill: 'rgba(168,237,255,0.5)',
+          defaultFill: 'rgba(168,237,255,0.5)'
+        }
+      });
+    </script>
   </body>
 </html>
