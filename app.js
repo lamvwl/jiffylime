@@ -14,7 +14,7 @@ app.get('/countrydates', function (req, res) {
   res.send('countrydates')
 })
 
-app.get('/total', function (req, resmk) {
+app.get('/total', function (req, res) {
   res.send('total')
 })
 
