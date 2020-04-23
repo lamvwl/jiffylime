@@ -14,7 +14,7 @@ app.get('/countrydates', function (req, res) {
   res.send('countrydates')
 })
 
-app.get('/total', function (req, resmk) {
+app.get('/total', function (req, res) {
   res.send('total')
 })
 
@@ -22,9 +22,9 @@ app.get('/countries', function (req, res) {
   res.send('countries')
 })
 
-app.get('/summary', function (req, res) {
-  res.send('summary')
-})
+// app.get('/summary', function (req, res) {
+//   res.send('summary')
+// })
 
 app.get('/worlddates', function (req, res) {
   res.send('worlddates')
