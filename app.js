@@ -22,9 +22,9 @@ app.get('/countries', function (req, res) {
   res.send('countries')
 })
 
-app.get('/summary', function (req, res) {
-  res.send('summary')
-})
+// app.get('/summary', function (req, res) {
+//   res.send('summary')
+// })
 
 app.get('/worlddates', function (req, res) {
   res.send('worlddates')
