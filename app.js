@@ -2,6 +2,19 @@ var express = require('express');
 var app = express();
 const axios = require('axios');
 
+var uuid = require('uuid-random');
+const morgan = require('morgan');
+
+morgan.token('uuid', function getId(req) {
+    return uuid();
+});
+
+app.use(morgan('[:uuid] - :method :status :url :response-time ms'));
+
+var bunyan = require('bunyan');
+var log = bunyan.createLogger({name: "jiffylime"});
+log.info("startup");
+
 
 app.use('/', require('./routes/router.js'))
 //routes
