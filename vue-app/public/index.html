@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body style="background-color:black";>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <script src="scripts/axios.min.js"></script>
+    <script src="scripts/d3-3.5.3.min.js"></script>
+    <script src="scripts/topojson-1.6.9.min.js"></script>
+    <script src="scripts/datamaps.world.hires.min.js"></script>
+        <!-- <div id="app"></div> -->
+    <div id="container" style="position: relative; width: 1300px; height: 900px;"></div>
+    <script>
+      axios.get('http://LOCAL_NODEJS_HOST:3000/summary')
+        .then((response) => {
+          var dataset = {};
+              series = response.data;
+
+              // this loop is useful for excluding certain outliers and aids visualization 
+              // series.forEach(function(item, i){ 
+              //   if(item[0] == "USA"){
+              //     series.splice(i,1)
+              //   }
+              // });
+
+          var onlyValues = series.map(function(obj){ return obj[1]; });
+          var minValue = Math.min.apply(null, (onlyValues)),
+                maxValue = Math.max.apply(null, (onlyValues));
+
+          var paletteScale = d3.scale.linear()
+                .domain([minValue,maxValue])
+                // .range(["#EFEFFF","#02386F"]); // blue color
+                // .range(["#EFEFFF","#e90b49"]); // WHITE to RED
+                // .range(["#EFEFFF","#fa0f4f"]); // WHITE to LIGHTER RED
+                .range(["#FFE4E1","#FA0F4F"]); // reddish white to LIGHTER RED Provides a good contrast scale
+
+          series.forEach(function(item){
+            var iso = item[0],
+              value = item[1];
+              dataset[iso] = { fillColor: paletteScale(value), numberOfThings: value };
+          });
+
+          var map = new Datamap({
+            element: document.getElementById('container'),
+            projection: 'mercator',
+            data: dataset,        
+            fills: {
+              defaultFill: 'rgba(168,237,255,0.5)'
+            },
+            geographyConfig: {
+              popupOnHover: true,
+              highlightOnHover: true,
+              highlightFillColor: 'rgba(0,253,253,1.0)',
+              borderColor: 'rgba(0,253,253,1.0)',
+              borderWidth: 0.5,
+
+              popupTemplate: function(geo, data) {
+                // don't show tooltip if country is NOT present in dataset
+                if (!data) { return ['<div class="hoverinfo">', '<strong>', geo.properties.name, '</strong>', '</div>'].join('');}
+                // tooltip content
+                return ['<div class="hoverinfo">', '<strong>', geo.properties.name, '</strong>', '<br>Total Confirmed Cases: <strong>', data.numberOfThings, '</strong>', '</div>'].join('');
+              }
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
