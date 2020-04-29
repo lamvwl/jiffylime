@@ -4,18 +4,28 @@ const countrymapping = require('../config/countrymap');
 
 module.exports = function (req, res, next) {
 
-  axios.get(urls.covid + '/summary')
+  //For Development only (API rate limit workaround)
+  var tempSummary = require('../temp/summary.json'),
+    tempSummary = {"data": tempSummary};
+    Promise.resolve(tempSummary)
+  ////
+
+  // axios.get(urls.covid + '/summary')
     .then(function (response) {
 
       let totalConfirmed = [];
-
-      response.data.Countries.forEach(function (e) {
-        let tempArray = [];
-        tempArray[0] = countrymapping.getCountryISO3(e.CountryCode);
-        tempArray[1] = e.TotalConfirmed;
-        totalConfirmed.push(tempArray);
-      }) 
-
+      var array = response.data.Countries;
+      
+        for(e in array) {
+          var cc = countrymapping.getCountryISO3(array[e].CountryCode)
+          let tempArray = [];
+          tempArray[0] = cc;
+          tempArray[1] = array[e].TotalConfirmed;
+          totalConfirmed.push(tempArray);
+        }
+      return totalConfirmed; 
+    })
+    .then(function (totalConfirmed) {
       res.send(totalConfirmed);
     })
     .catch(function (error) {
