@@ -2,10 +2,16 @@ var express = require('express');
 var app = express();
 const axios = require('axios');
 
+//FOR DEVELOPMENT ONLY
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+  next();
+});
+////
 
 app.use('/', require('./routes/router.js'))
-//routes
 
+//routes
 app.get('/live', function (req, res) {
   res.send('live')
 })
