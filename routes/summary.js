@@ -13,22 +13,27 @@ module.exports = function (req, res, next) {
   // axios.get(urls.covid + '/summary')
     .then(function (response) {
 
-      let totalConfirmed = [];
-      var array = response.data.Countries;
-      
-        for(e in array) {
-          var cc = countrymapping.getCountryISO3(array[e].CountryCode)
-          let tempArray = [];
-          tempArray[0] = cc;
-          tempArray[1] = array[e].TotalConfirmed;
-          totalConfirmed.push(tempArray);
-        }
-      return totalConfirmed; 
+      let countryPromiseArray = response.data.Countries.map(function (e) {
+        return countrymapping.getCountryISO3(e.CountryCode)
+          .then(function (result) {
+            return [result, e.TotalConfirmed];
+        })
+      });
+
+      let countryArrayTotalConfirmed = 
+        Promise.allSettled(countryPromiseArray)
+          .then(function (results) {
+          return results.map(function (e) {
+            return e.value;
+          });
+        });
+
+      return countryArrayTotalConfirmed;
     })
     .then(function (totalConfirmed) {
       res.send(totalConfirmed);
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch(function (err) {
+      next(err);
     })
 }

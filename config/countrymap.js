@@ -1,9 +1,30 @@
-//Modified from https://github.com/vtex/country-iso-3-to-2
+//ISO Map Modified from https://github.com/vtex/country-iso-3-to-2
+
+const redis = require('redis');
+const redisPort = process.env.PORT || 6379;
+const redisClient = redis.createClient(redisPort);
+const { promisify } = require("util");
 
 module.exports = {
-
   getCountryISO3: function (countryCode) {
-    return this.countryISOMap[countryCode];
+
+    checkCache = promisify(redisClient.get).bind(redisClient);
+    const countryISOMap = this.countryISOMap;
+
+    return checkCache(countryCode)
+      .then(function (data) {
+        if (data == null) {
+          let value = countryISOMap[countryCode];
+          redisClient.setex(countryCode, 3000, countryISOMap[countryCode]);
+          return value;
+        } else {
+          return data;
+        }
+      })
+      .catch(function (err) {
+        return err;
+      });
+
   },
 
   countryISOMap: {
