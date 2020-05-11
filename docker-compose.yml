@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jiffylime
+    container_name: jiffylime
+    restart: unless-stopped 
+    ports:
+      - "80:3000"
+    command: node /usr/src/app/app.js
+
+  vuejs:
+    build:
+      context: ./vue-app
+      dockerfile: Dockerfile
+    image: vueapp
+    container_name: vueapp
+    restart: unless-stopped 
+    ports:
+      - "9090:8080"
+    command: npm run serve
