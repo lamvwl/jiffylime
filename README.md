@@ -5,11 +5,11 @@ A NodeJS Demo App built with Express.js, Bunyan/Morgan logging and good ol' nati
   * a D3.js data visualization using the Vue.js framework 
   * caching via Redis
   * all wrapped in a Docker-ized container with a baked-in ELK stack for log tracking/analysis
-  * Enjoy!! 
+  * Enjoy (...or cry) and be in good health!! 
 
 
 
-> #### *Total Covid-19 cases around the world*
+> #### *Total Covid-19 cases around the world   (updated daily in realtime)*
 ![](preview-usainc.gif)   
 #### .
 
